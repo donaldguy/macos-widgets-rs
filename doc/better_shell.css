@@ -1,0 +1,11 @@
+.language-shell ::before {
+    content: "$ ";
+    opacity: 0.5;
+}
+
+.language-output {
+    display: block;
+    position: relative;
+    top: -15px;
+    font-size: 0.8em;
+}

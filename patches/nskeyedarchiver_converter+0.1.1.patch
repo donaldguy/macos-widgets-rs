@@ -1,0 +1,12 @@
+diff --git a/src/lib.rs b/src/lib.rs
+index 0b07c37..1f54980 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -146,7 +146,6 @@ impl Converter {
+         let mut dict = Dictionary::new();
+         for (key, value) in &self.top {
+             let uid = uid!(value, key.to_string());
+-            println!("-- TOP: {key} (uid={}) --", uid.get());
+             let mut parents = vec![];
+             let Some(value) = self.decode_object(&uid.clone(), &mut parents)? else {
+                 return Err(ConverterError::InvalidObjectEncoding(uid.get()));
