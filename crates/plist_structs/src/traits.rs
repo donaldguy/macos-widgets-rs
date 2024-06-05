@@ -1,16 +1,26 @@
-pub trait PlistDerivedStruct: Sized + serde::de::DeserializeOwned {}
+use super::Error;
 
-pub trait TryInto<T: PlistDerivedStruct> {
+pub trait FromPlist: Sized + serde::de::DeserializeOwned {
+    fn is_from_plist(&self) -> bool {
+        true
+    }
+
+    fn from_file<P: AsRef<std::path::Path>>(path: P) -> Result<Self, Error> {
+        plist::from_file(path)
+    }
+}
+
+pub trait TryInto<T: FromPlist> {
     type Error;
 
     fn plist_try_into(self) -> Result<T, Self::Error>;
 }
 
-pub trait Into<T: PlistDerivedStruct> {
+pub trait Into<T: FromPlist> {
     fn plist_into(self) -> T;
 }
 
-impl<T: PlistDerivedStruct> TryInto<T> for &plist::Value {
+impl<T: FromPlist> TryInto<T> for &plist::Value {
     type Error = plist::Error;
 
     fn plist_try_into(self) -> Result<T, Self::Error> {
@@ -20,7 +30,7 @@ impl<T: PlistDerivedStruct> TryInto<T> for &plist::Value {
 
 // impl<T> Into<T> for dyn TryInto<T, Error = Box<dyn std::error::Error>>
 // where
-//     T: PlistDerivedStruct,
+//     T: FromPlist,
 // {
 //     fn into(self) -> T {
 //         match self.try_into() {
@@ -34,4 +44,4 @@ impl<T: PlistDerivedStruct> TryInto<T> for &plist::Value {
 //     }
 // }
 
-impl PlistDerivedStruct for plist::Dictionary {}
+impl FromPlist for plist::Dictionary {}

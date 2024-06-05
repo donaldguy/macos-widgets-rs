@@ -1,13 +1,14 @@
+use plist_structs::UnknownTypeValue;
 use serde_derive::Deserialize;
 
 #[derive(Clone, Deserialize)]
 pub struct CHSIntentReference {
     //$classes = ["CHSIntentReference", "NSObject"]
     #[serde(rename = "stableHash")]
-    stable_hash: plist::Integer,
+    stable_hash: u64,
 
-    idata: Option<plist::Value>,
-    pcdata: Option<plist::Data>,
+    idata: Option<plist_structs::UnknownTypeValue>,
+    pcdata: Option<plist_structs::BinaryData>,
 }
 
 impl std::fmt::Debug for CHSIntentReference {
@@ -17,10 +18,10 @@ impl std::fmt::Debug for CHSIntentReference {
 
         if let Some(i) = self.idata.as_ref() {
             match i {
-                plist::Value::Data(d) => {
+                UnknownTypeValue::Data(d) => {
                     m.entry(&"idata", &format!("[{} bytes]", d.len()));
                 }
-                plist::Value::Dictionary(d) => {
+                UnknownTypeValue::Dictionary(d) => {
                     if d.contains_key("NS.data") {
                         m.entry(
                             &"idata",

@@ -1,29 +1,37 @@
+[workspace]
+members = ["crates/*"]
+
+[workspace.dependencies]
+nskeyedarchiver_converter = "0.1.1"
+plist = { version = "1.6.1", features = ["serde"] }
+plist_structs = { path = "crates/plist_structs" }
+plist_structs_derive = { path = "crates/plist_structs_derive" }
+serde = "1.0.203"
+serde_derive = "1.0.203"
+
 [package]
 name = "macos-widgets"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 readme = "README.md"
 
 [build]
-rustdocflags = ["--extend-css", "doc/better_shell.css", "--document-private-items"]
+rustdocflags = [
+    "--extend-css",
+    "doc/better_shell.css",
+    "--document-private-items",
+]
 
 [dependencies]
-base64 = "0.22.1"
 dirs = "5.0.1"
 enumflags2 = { version = "0.7.9", features = ["serde"] }
-nskeyedarchiver_converter = "0.1.1"
-plist = { version = "1.6.1", features = ["serde"] }
+plist_structs = { workspace = true }
+plist_structs_derive = { workspace = true }
 pretty_assertions = "1.4.0"
-serde = "1.0.203"
-serde_derive = "1.0.203"
+serde = { workspace = true }
+serde_derive = { workspace = true }
 serde_repr = "0.1.19"
 uuid = { version = "1.8.0", features = ["serde"] }
-
-[package.metadata.patch]
-crates = ["nskeyedarchiver_converter"]
-
-[patch.crates-io]
-nskeyedarchiver_converter = { path="./target/patch/nskeyedarchiver_converter-0.1.1"}
 
 
 [dev-dependencies]

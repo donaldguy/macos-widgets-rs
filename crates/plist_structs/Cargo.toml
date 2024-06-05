@@ -1,0 +1,16 @@
+[package]
+name = "plist_structs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+nskeyedarchiver_converter = { workspace = true }
+plist = { workspace = true, features = ["serde"] }
+serde = { workspace = true }
+serde_derive = { workspace = true }
+
+[package.metadata.patch]
+crates = ["nskeyedarchiver_converter"]
+
+[patch.crates-io]
+nskeyedarchiver_converter = { path = "./target/patch/nskeyedarchiver_converter-0.1.1" }

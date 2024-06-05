@@ -4,12 +4,14 @@ use std::{
 };
 
 use dirs::home_dir;
+use plist_structs::FromPlist;
+use plist_structs_derive::FromPlist;
 use serde_derive::Deserialize;
 
 pub mod widgets;
 
-#[derive(Clone, Debug, Deserialize)]
-pub struct NotificationCenterUI {
+#[derive(Clone, Debug, Deserialize, FromPlist)]
+pub struct NotificationCenterUIPlist {
     /// In my experience its "0"; but I'm guessing it might be "0", the [`FMFontStyle`](https://developer.apple.com/documentation/applicationservices/fmfontstyle)
     #[serde(rename = "fontStyle")]
     _font_style: i16,
@@ -24,9 +26,22 @@ pub struct NotificationCenterUI {
     pub widgets: widgets::WidgetsDict,
 }
 
-impl super::PlistDerivedStruct for NotificationCenterUI {}
+impl NotificationCenterUIPlist {
+    fn from_file_at<P: AsRef<std::path::Path>>(
+        p: P,
+    ) -> std::result::Result<Self, plist_structs::Error> {
+        FromPlist::from_file(p)
+    }
 
-impl NotificationCenterUI {
+    pub fn from_file() -> std::result::Result<Self, Box<dyn std::error::Error>> {
+        let path = Self::plist_path()?;
+
+        match Self::from_file_at(path) {
+            Ok(v) => Ok(v),
+            Err(e) => Err(e.into()),
+        }
+    }
+
     const BUNDLE_ID: &'static str = "com.apple.notificationcenterui";
     ///`$HOME/Library/Containers/com.apple.notificationcenterui/Data`
     fn container_dir() -> Result<PathBuf> {
@@ -53,9 +68,10 @@ mod tests {
     use super::*;
 
     #[test]
-    fn can_load_from_tests_file() -> std::result::Result<(), plist::Error> {
-        let ncui: NotificationCenterUI =
-            plist::from_file(crate::test_files::notificationcenterui_plist())?;
+    fn can_load_from_tests_file() -> std::result::Result<(), plist_structs::Error> {
+        let ncui = NotificationCenterUIPlist::from_file_at(
+            crate::test_files::notificationcenterui_plist(),
+        )?;
 
         assert_eq!(ncui._font_style, 0);
         assert_eq!(ncui._last_analytics_stamp, 738152425.610449);
@@ -69,18 +85,17 @@ mod tests {
 
         #[test]
         fn ncui_container_exists() {
-            assert!(NotificationCenterUI::container_dir().unwrap().exists())
+            assert!(NotificationCenterUIPlist::container_dir().unwrap().exists())
         }
 
         #[test]
         fn ncui_plist_exists() {
-            assert!(NotificationCenterUI::plist_path().unwrap().exists())
+            assert!(NotificationCenterUIPlist::plist_path().unwrap().exists())
         }
 
         #[test]
         fn ncui_plist_parseable() {
-            let _: NotificationCenterUI =
-                plist::from_file(NotificationCenterUI::plist_path().unwrap()).unwrap();
+            let _ = NotificationCenterUIPlist::from_file().unwrap();
         }
     }
 }

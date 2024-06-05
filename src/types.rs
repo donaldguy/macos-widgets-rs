@@ -1,7 +1,7 @@
 //! Here (if you're hackin') find structs and stuff
 
-pub mod plist;
-pub use plist::PlistDerivedStruct;
+mod notificationcenterui_plist;
+pub use notificationcenterui_plist::NotificationCenterUIPlist;
 
 /// Structs corresponding to `PrivateFrameworks/ChronoServices.framework`
 ///

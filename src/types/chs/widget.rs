@@ -1,3 +1,4 @@
+use plist_structs_derive::FromPlist;
 use serde_derive::Deserialize;
 use serde_repr::Deserialize_repr;
 
@@ -19,7 +20,7 @@ pub enum CHSWidgetFamily {
     // AccessoryInline = 8
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, FromPlist)]
 pub struct CHSWidget {
     // $classes = ["CHSWidget", "NSObject"]
     /// The name of the widget
@@ -30,5 +31,3 @@ pub struct CHSWidget {
     extension_identity: super::extension_identity::CHSExtensionIdentity,
     intent2: Option<super::intent::reference::CHSIntentReference>,
 }
-
-impl crate::types::PlistDerivedStruct for CHSWidget {}

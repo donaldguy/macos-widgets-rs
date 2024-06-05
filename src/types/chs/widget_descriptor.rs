@@ -1,4 +1,5 @@
 use enumflags2::{bitflags, BitFlags};
+use plist_structs_derive::FromPlist;
 use serde_derive::Deserialize;
 use serde_repr::Deserialize_repr;
 
@@ -7,7 +8,7 @@ use super::intent::reference::CHSIntentReference;
 /// Speculated meanings of values in supported_size_classes
 #[bitflags]
 #[repr(u16)]
-#[derive(Clone, Copy, Debug, PartialEq, Deserialize)]
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq)]
 pub enum CHSWidgetFamilyMask {
     // low bit (1) appears to be unused (always 0)
     WidgetSmall = 1 << 1,  // 2
@@ -50,7 +51,7 @@ pub enum CHSWidgetVisibilityKey {
     RequiresUnlockOnStandy = 2,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, FromPlist)]
 #[serde(rename_all = "camelCase")]
 pub struct CHSWidgetDescriptor {
     // $classes = 420 * {"CHSMutableWidgetDescriptor", "CHSWidgetDescriptor",  "CHSBaseDescriptor", "NSObject"]
@@ -73,7 +74,7 @@ pub struct CHSWidgetDescriptor {
     /// But 2 and 3 both seem to point toward iOS & I can't tell if:
     /// - possibly iPhone only vs iPhone+iPad.
     /// - simply different generations of API?
-    platform: plist::Integer, // from CHSBaseDescriptor
+    platform: u8, // from CHSBaseDescriptor
 
     sdk_version: String, // from CHSBaseDescriptor
     //  10             sdk_version: "14.2",
@@ -97,14 +98,14 @@ pub struct CHSWidgetDescriptor {
     pub supported_size_classes: BitFlags<CHSWidgetFamilyMask>, // u16,
 
     /// here, as probably elsewhere, intent meaning ~Shortcuts.
-    intent_type: Option<plist::Value>, // 312 present v 214 absent
+    intent_type: Option<plist_structs::UnknownTypeValue>, // 312 present v 214 absent
     #[serde(rename = "defaultIntent2")]
     default_intent_reference: Option<CHSIntentReference>,
     intent_recommendations_container:
         Option<super::intent::recommendation::CHSIntentRecommendationsContainer>,
     /// this shows filled in for me only for the Safari extension Noir
     /// and once for Firefox Focus ?
-    fetch_default_intent_completions: Option<plist::Value>,
+    fetch_default_intent_completions: Option<String>,
     //---
     // Excluded fields:
     //---
@@ -137,5 +138,3 @@ pub struct CHSWidgetDescriptor {
     // point at integers of unclear-to-me meaning (values are all(?) 8)
     // it makes nskeyedarchiver_converter spuriously detect circular references
 }
-
-impl crate::types::PlistDerivedStruct for CHSWidgetDescriptor {}

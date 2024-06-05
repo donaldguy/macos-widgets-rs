@@ -1,0 +1,12 @@
+[package]
+name = "plist_structs_derive"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+plist_structs = { workspace = true }
+serde = { workspace = true }
+serde_derive = { workspace = true }
+
+[lib]
+proc-macro = true

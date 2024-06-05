@@ -3,11 +3,10 @@
 
 pub mod types;
 
-use types::plist::notificationcenterui as ncui;
+use types::NotificationCenterUIPlist;
 
 pub fn load_and_print() -> Result<(), Box<dyn std::error::Error>> {
-    let p: ncui::NotificationCenterUI =
-        plist::from_file(ncui::NotificationCenterUI::plist_path().unwrap()).unwrap();
+    let p = NotificationCenterUIPlist::from_file().unwrap();
 
     println!("{:#?}", p);
 

@@ -13,19 +13,15 @@ pub enum WidgetsDict {
     V1(v1::WidgetsDict),
 }
 
-impl crate::types::PlistDerivedStruct for v1::InstantiatedWidgetContainer {}
-impl crate::types::PlistDerivedStruct for v1::InstalledWidgetContainer {}
-impl crate::types::PlistDerivedStruct for v1::WidgetsDict {}
-impl crate::types::PlistDerivedStruct for WidgetsDict {}
-
 pub mod v1 {
-    use super::*;
-    use crate::types::{
-        plist::{NSKeyedArchiverFormattedPlist, NestedBinaryPlist, TryInto},
-        CHSWidget, CHSWidgetDescriptor,
-    };
+    use plist_structs::{NSKeyedArchiverFormattedPlist, NestedBinaryPlist, TryInto};
+    use plist_structs_derive::FromPlist;
 
-    #[derive(Clone, Debug, Deserialize)]
+    use crate::types::{CHSWidget, CHSWidgetDescriptor};
+
+    use super::*;
+
+    #[derive(Clone, Debug, Deserialize, FromPlist)]
     pub struct WidgetsDict {
         #[serde(rename = "DesktopWidgetPlacementStorage")]
         pub placement: NestedBinaryPlist<placement::v1::WidgetPlacement>,
@@ -33,7 +29,7 @@ pub mod v1 {
         pub widgets: Vec<NestedBinaryPlist<self::v1::InstalledWidgetContainer>>,
     }
 
-    #[derive(Clone, Deserialize)]
+    #[derive(Clone, Deserialize, FromPlist)]
     pub struct InstantiatedWidgetContainer {
         pub uuid: uuid::Uuid,
         pub widget: NestedBinaryPlist<NSKeyedArchiverFormattedPlist<CHSWidget>>,
@@ -54,7 +50,7 @@ pub mod v1 {
             NestedBinaryPlist<NSKeyedArchiverFormattedPlist<CHSWidgetDescriptor>>,
         pub _localized_locale: String,
         pub _version: String,
-        pub _mod_date: plist::Value,
+        pub _mod_date: plist_structs::UnknownTypeValue,
     }
 
     impl std::fmt::Debug for InstalledWidgetContainer {

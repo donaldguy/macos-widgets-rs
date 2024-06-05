@@ -59,11 +59,11 @@ impl<T> AsMut<T> for NestedBinaryPlist<T> {
     }
 }
 
-use super::{Into, PlistDerivedStruct, TryInto};
+use super::{FromPlist, Into, TryInto};
 
 impl<T> Into<T> for NestedBinaryPlist<T>
 where
-    T: PlistDerivedStruct,
+    T: FromPlist,
 {
     fn plist_into(self) -> T {
         self.value
@@ -73,7 +73,7 @@ where
 impl<I, T> TryInto<T> for NestedBinaryPlist<I>
 where
     I: TryInto<T>,
-    T: PlistDerivedStruct,
+    T: FromPlist,
 {
     type Error = I::Error;
 

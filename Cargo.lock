@@ -34,9 +34,9 @@ dependencies = [
 
 [[package]]
 name = "anstyle-query"
-version = "1.0.3"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a64c907d4e79225ac72e2a354c9ce84d50ebb4586dee56c82b3ee73004f537f5"
+checksum = "ad186efb764318d35165f1758e7dcef3b10628e26d41a44bc5550652e6804391"
 dependencies = [
  "windows-sys 0.52.0",
 ]
@@ -62,12 +62,6 @@ name = "base64"
 version = "0.21.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d297deb1925b89f2ccc13d7635fa0714f12c87adce1c75356b39ca9b7178567"
-
-[[package]]
-name = "base64"
-version = "0.22.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
 name = "bitflags"
@@ -259,14 +253,13 @@ checksum = "dd1bc4d24ad230d21fb898d1116b1801d7adfc449d42026475862ab48b11e70e"
 
 [[package]]
 name = "macos-widgets"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "assert_matches",
- "base64 0.22.1",
  "dirs",
  "enumflags2",
- "nskeyedarchiver_converter",
- "plist",
+ "plist_structs",
+ "plist_structs_derive",
  "pretty_assertions",
  "serde",
  "serde_derive",
@@ -283,6 +276,8 @@ checksum = "6c8640c5d730cb13ebd907d8d04b52f55ac9a2eec55b440c8892f40d56c76c1d"
 [[package]]
 name = "nskeyedarchiver_converter"
 version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4afde5dfe40aaa3e3f077a0b1f2491e983b7d33d629ed6ef6c2dab35cad3f06a"
 dependencies = [
  "clap",
  "plist",
@@ -307,12 +302,31 @@ version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d9d34169e64b3c7a80c8621a48adaf44e0cf62c78a9b25dd9dd35f1881a17cf9"
 dependencies = [
- "base64 0.21.7",
+ "base64",
  "indexmap",
  "line-wrap",
  "quick-xml",
  "serde",
  "time",
+]
+
+[[package]]
+name = "plist_structs"
+version = "0.1.0"
+dependencies = [
+ "nskeyedarchiver_converter",
+ "plist",
+ "serde",
+ "serde_derive",
+]
+
+[[package]]
+name = "plist_structs_derive"
+version = "0.1.0"
+dependencies = [
+ "plist_structs",
+ "serde",
+ "serde_derive",
 ]
 
 [[package]]
@@ -333,9 +347,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.84"
+version = "1.0.85"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec96c6a92621310b51366f1e28d05ef11489516e93be030060e5fc12024a49d6"
+checksum = "22244ce15aa966053a896d1accb3a6e68469b97c7f33f284b99f0d576879fc23"
 dependencies = [
  "unicode-ident",
 ]

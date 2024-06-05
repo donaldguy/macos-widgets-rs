@@ -8,13 +8,12 @@ pub enum WidgetPlacement {
     V1(v1::WidgetPlacement),
 }
 
-impl crate::types::PlistDerivedStruct for v1::WidgetPlacement {}
-impl crate::types::PlistDerivedStruct for WidgetPlacement {}
-
 pub mod v1 {
+    use plist_structs_derive::FromPlist;
+
     use super::*;
 
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, Deserialize, FromPlist, Serialize)]
     #[serde(rename_all = "PascalCase")]
     pub struct WidgetPlacement {
         numbered_displays: Vec<self::display::NumberedDisplays>,
@@ -139,13 +138,13 @@ pub mod v1 {
             where
                 S: serde::Serializer,
             {
-                let mut d = plist::Dictionary::new();
+                let mut d = plist_structs::Dictionary::new();
                 d.insert(
                     self.0.to_string(),
-                    plist::Value::Dictionary(plist::Dictionary::new()),
+                    plist_structs::UnknownTypeValue::Dictionary(plist_structs::Dictionary::new()),
                 );
 
-                plist::Dictionary::serialize(&d, serializer)
+                plist_structs::Dictionary::serialize(&d, serializer)
             }
         }
 
@@ -154,7 +153,7 @@ pub mod v1 {
             where
                 D: serde::Deserializer<'de>,
             {
-                match plist::Dictionary::deserialize(deserializer) {
+                match plist_structs::Dictionary::deserialize(deserializer) {
                     Err(e) => Err(serde::de::Error::custom(format!(
                         "malformed widget size: {:?}",
                         e
@@ -165,7 +164,9 @@ pub mod v1 {
                             Err(serde::de::Error::invalid_length(k.len(), &"1"))
                         } else {
                             let k0 = k.last().unwrap();
-                            if let Some(plist::Value::Dictionary(v0)) = dict.get(k0) {
+                            if let Some(plist_structs::UnknownTypeValue::Dictionary(v0)) =
+                                dict.get(k0)
+                            {
                                 if !v0.is_empty() {
                                     Err(serde::de::Error::invalid_value(
                                         serde::de::Unexpected::Other(&format!(

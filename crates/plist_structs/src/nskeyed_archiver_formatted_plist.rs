@@ -6,13 +6,13 @@ use nskeyedarchiver_converter::Converter;
 use nskeyedarchiver_converter::ConverterError;
 use serde_derive::Deserialize;
 
-use super::PlistDerivedStruct;
+use super::FromPlist;
 
 #[derive(Clone, Debug, Deserialize)]
 #[serde(transparent)]
 pub struct NSKeyedArchiverFormattedPlist<T>
 where
-    T: PlistDerivedStruct,
+    T: FromPlist,
 {
     raw: plist::Value,
     #[serde(skip)]
@@ -23,7 +23,7 @@ where
 
 impl<T> NSKeyedArchiverFormattedPlist<T>
 where
-    T: PlistDerivedStruct,
+    T: FromPlist,
 {
     pub fn try_decode(&mut self) -> Result<&plist::Value, ConverterError> {
         if let None = self.converted {
@@ -44,7 +44,7 @@ use super::TryInto;
 
 impl<T> TryInto<T> for NSKeyedArchiverFormattedPlist<T>
 where
-    T: PlistDerivedStruct,
+    T: FromPlist,
 {
     type Error = Box<dyn std::error::Error>;
 

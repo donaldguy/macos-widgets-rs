@@ -9,7 +9,7 @@ pub struct CHSIntentRecommendation {
 #[derive(Clone, Deserialize)]
 pub struct CHSIntentRecommendationsContainer {
     recommendations: Vec<CHSIntentRecommendation>,
-    schema: Option<plist::Data>,
+    schema: Option<plist_structs::BinaryData>,
 }
 
 impl std::fmt::Debug for CHSIntentRecommendationsContainer {
